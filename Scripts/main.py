@@ -15,12 +15,15 @@ class SignUpPage(QtWidgets.QMainWindow):
         super(SignUpPage, self).__init__()
         uic.loadUi('Sign up page.ui', self)
         self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')
+        self.passwordHelpButton = self.findChild(QtWidgets.QToolButton, 'passwordHelpButton')
         create_database(get_database_connection())
         # Inputs:
         self.userNameInput = self.findChild(QtWidgets.QLineEdit, 'name_lineEdit')
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
         self.password1 = self.findChild(QtWidgets.QLineEdit, 'password_1')  # getting inital password input
+        self.password1.setEchoMode(QtWidgets.QLineEdit.Password)
         self.password2 = self.findChild(QtWidgets.QLineEdit, 'password_2')
+        self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
         self.database = []
 
         # Labels:
@@ -33,7 +36,7 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.signedUpAlready.clicked.connect(self.switchwindow)
         self.signUpButton.clicked.connect(self.signupbuttonpressed)
         self.signedUpAlready.clicked.connect(self.testCase)
-
+        self.signedUpAlready.clicked.connect(self.passwordVisibilty)
         # self.logInPage = logInpage()
         # self.stackedWidget.addWidget(self.logInPage)
         # when u have time please read this and do this https://stackoverflow.com/questions/60904814/how-to-change-window-widget-with-pyqt5-using-ui-files
@@ -52,6 +55,10 @@ class SignUpPage(QtWidgets.QMainWindow):
     def testCase(self):
         print("test")
 
+    def passwordVisibilty(self):
+        self.password1.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
+
     def signupbuttonpressed(self):
         print('password 1: ' + self.password1.text())
         print('password 2: ' + self.password2.text())
@@ -65,10 +72,10 @@ class SignUpPage(QtWidgets.QMainWindow):
     def matchingpasswordvalidation(self):
         if self.password1.text() != self.password2.text():  # making sure the passwords match
             print('non matching passwords please retype')
-            self.paswordError_lable.setText('Non-matching passwords')
+            self.termsOfUseMessage.setText('Non-matching passwords')
             return False
         else:
-            self.paswordError_label.setText('')
+            self.termsOfUseMessage.setText(' ')
         # showing that the passwords are matching ensuring that neither are stored
             return True  # showing that they arnt matching
 
@@ -79,7 +86,7 @@ class SignUpPage(QtWidgets.QMainWindow):
         if matching:
             if len(self.password1.text()) < 5 or len(self.password1.text()) > 15:  # password lenght limit of 15 with
                 # 5 for security
-                self.passwordError_label.setText('Password length error')
+                self.termsOfUseMessage.setText('Password length error')
                 return False
             else:
                 return True
@@ -107,7 +114,7 @@ class SignUpPage(QtWidgets.QMainWindow):
 
 
     def termandconditionscheck(self):
-        if self.termsOfUse.clicked():
+        if self.termsOfUse.isChecked():
             return True
         else:
             self.termsOfUseMessage.setText('You must agree to the T&C')
@@ -125,15 +132,15 @@ class SignUpPage(QtWidgets.QMainWindow):
             return False
         else:
             email = self.emailInput.text()
-            if email == execute_query(get_database_connection(), f"SELECT email FROM users WHERE email = '{email}';"):
+            if email != execute_query(get_database_connection(), f"SELECT email FROM users WHERE email = '{email}';"):
                 print(type(self.passwordError_label))
                 self.termsOfUseMessage.setText('')
                 return True
             else:
-                self.passwordError_label.setText('This email is already in use')
+                self.termsOfUseMessage.setText('This email is already in use')
                 return False
     def alreadyausercheck(self):
-
+        print("already a user check")
         try:
             userName = self.userNameInput.text()
             if userName == execute_query(get_database_connection(), f"SELECT username FROM users WHERE username = '{userName}';"):
@@ -142,7 +149,7 @@ class SignUpPage(QtWidgets.QMainWindow):
 
                 return False
             else:
-                self.termsOfUseMessage.setText('')
+                self.termsOfUseMessage.setText(' ')
                 return True
 
             #
