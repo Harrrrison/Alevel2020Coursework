@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>537</width>
+    <height>447</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(16, 24, 32)</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>315</width>
+      <height>324</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="1" colspan="3">
+          <widget class="QLineEdit" name="email_LineEdit">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLineEdit" name="password_2">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" rowspan="2" colspan="2">
+          <widget class="QLabel" name="retype_lable">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>Re-type password:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="email_lable">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>Email:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3" rowspan="2">
+          <widget class="QToolButton" name="passwordHelpButton">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>?</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLineEdit" name="password_1">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QLabel" name="password_lable">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>Password:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="name_Lable">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>Name:</string>
+           </property>
+           <property name="buddy">
+            <cstring>name_Lable</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="3">
+          <widget class="QLineEdit" name="name_lineEdit">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="3">
+          <widget class="QLabel" name="paswordError_lable">
+           <property name="font">
+            <font>
+             <underline>true</underline>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 0, 0)
+
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="termsOfUseMessage">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(255, 0, 0);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="termsOfUse">
+           <property name="font">
+            <font>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>I agree to the terms of use and privacy policy </string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="signUpButton">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>Sign up</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QPushButton" name="cancelButton">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(242, 170, 76)
+
+</string>
+           </property>
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="hasAccount">
+       <property name="styleSheet">
+        <string notr="true">color: rgb(38, 143, 0);</string>
+       </property>
+       <property name="text">
+        <string>I already have an account</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>537</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>name_lineEdit</tabstop>
+  <tabstop>email_LineEdit</tabstop>
+  <tabstop>password_1</tabstop>
+  <tabstop>password_2</tabstop>
+  <tabstop>passwordHelpButton</tabstop>
+  <tabstop>termsOfUse</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>318</x>
+     <y>347</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>privacyCheck()</slot>
+  <slot>takeInputs()</slot>
+  <slot>checkInputs()</slot>
+ </slots>
+</ui>
