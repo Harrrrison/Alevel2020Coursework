@@ -37,3 +37,6 @@ def print_tables(connection):
     for item in tables:
         tables_list.append(item[0])
     print(tables_list)
+
+if __name__ == '__main__':
+    print(".")

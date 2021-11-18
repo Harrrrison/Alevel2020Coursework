@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(16, 24, 32)</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -40,6 +43,12 @@
     </property>
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
     </property>
     <property name="tabPosition">
      <enum>QTabWidget::North</enum>
@@ -70,6 +79,12 @@
       <height>381</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
+    </property>
     <property name="frameShape">
      <enum>QFrame::WinPanel</enum>
     </property>
@@ -89,7 +104,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="dataTable">
     <property name="geometry">
      <rect>
       <x>740</x>
@@ -100,6 +115,12 @@
     </property>
     <property name="mouseTracking">
      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(242, 170, 76)
+
+
+</string>
     </property>
     <property name="showGrid">
      <bool>true</bool>
@@ -274,6 +295,12 @@
       <height>381</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
+    </property>
    </widget>
    <widget class="QMdiArea" name="mdiArea_2">
     <property name="geometry">
@@ -284,6 +311,12 @@
       <height>211</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
+    </property>
    </widget>
    <widget class="QMdiArea" name="mdiArea_3">
     <property name="geometry">
@@ -293,6 +326,12 @@
       <width>451</width>
       <height>271</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
     </property>
    </widget>
    <widget class="QPushButton" name="moreButton1">
@@ -306,6 +345,12 @@
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
     </property>
     <property name="text">
      <string>More...</string>
@@ -323,6 +368,12 @@
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
+    </property>
     <property name="text">
      <string>More...</string>
     </property>
@@ -339,6 +390,12 @@
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
+    </property>
     <property name="text">
      <string>More...</string>
     </property>
@@ -354,6 +411,12 @@
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(242, 170, 76)
+
+</string>
     </property>
     <property name="text">
      <string>More...</string>
@@ -471,7 +534,7 @@
   <tabstop>moreButton2</tabstop>
   <tabstop>moreButton3</tabstop>
   <tabstop>moreButton4</tabstop>
-  <tabstop>tableWidget</tabstop>
+  <tabstop>dataTable</tabstop>
  </tabstops>
  <resources/>
  <connections>

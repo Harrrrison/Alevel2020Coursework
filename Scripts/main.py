@@ -1,5 +1,6 @@
 from PyQt5 import uic, QtWidgets, QtGui
 from Scripts.LogIn import *
+from Scripts.MainPage import *
 import sys
 import os
 import hashlib
@@ -11,20 +12,27 @@ class SignUpPage(QtWidgets.QMainWindow):
     def __init__(self):
         super(SignUpPage, self).__init__()
         uic.loadUi('Sign up page.ui', self)
-        self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')        
+        self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')
+
+        # Inputs:
         self.userNameInput = self.findChild(QtWidgets.QLineEdit, 'name_lineEdit')
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
         self.password1 = self.findChild(QtWidgets.QLineEdit, 'password_1')  # getting inital password input
         self.password2 = self.findChild(QtWidgets.QLineEdit, 'password_2')
         self.database = []
+
+        # Labels:
         self.termsOfUse = self.findChild(QtWidgets.QCheckBox, 'termsOfUse')
         self.passwordError_label = self.findChild(QtWidgets.QLabel, 'passwordError_label')
         self.termsOfUseMessage = self.findChild(QtWidgets.QLabel, 'termsOfUseMessage')
         self.signedUpAlready = self.findChild(QtWidgets.QPushButton, 'hasAccount')
+
+        # Buttons:
         self.signedUpAlready.clicked.connect(self.switchwindow)
         self.signUpButton.clicked.connect(self.signupbuttonpressed)
         self.signedUpAlready.clicked.connect(self.testCase)
         self.logInWindow = logInpage()
+        # self.mainPage = MainPage()
 
         # getting second password input to verify matching
         self.show()
@@ -40,7 +48,7 @@ class SignUpPage(QtWidgets.QMainWindow):
 
     def showSelf(self):
         print("showself")
-        self.show()
+        SignUpPage.show(SignUpPage())
 
     def testCase(self):
         print("test")
@@ -50,7 +58,8 @@ class SignUpPage(QtWidgets.QMainWindow):
         print('password 2: ' + self.password2.text())
         if self.passwordvalidation(
                 self.matchingpasswordvalidation()) and self.termandconditionscheck() and self.emaivalidation():
-            self.passwordhash()
+            self.passwordhash(self.password1)
+            self.addtodatabase()
 
     def matchingpasswordvalidation(self):
         if self.password1.text() != self.password2.text():  # making sure the passwords match
@@ -81,7 +90,7 @@ class SignUpPage(QtWidgets.QMainWindow):
         print(self.password1.text())
         self.database.append(self.userNameInput.text())
         self.database.append(self.emailInput.text())
-        self.database.append(self.passwordhash())
+        self.database.append(self.passwordhash(self.password1))
 
         print(self.database)
 
@@ -113,14 +122,13 @@ class SignUpPage(QtWidgets.QMainWindow):
         else:
             return False
 
-    def passwordhash(self):
+    def passwordhash(self, password):
         #
         # I will use a real hashing algorythm and store the it next to the username and email
         # This will be then used to retreve user log in details
         #
-        pw1 = self.password1
-        bytespw1 = pw1.encode()
-        return hashlib.sha256(bytespw1)
+        print(hashlib.sha256(password.hashlib.encode('UTF-8')).hexdigest())
+        print("Password hash...")
 
     def usernamevalidation(self):
         if not (self.usernamenotinsystem()):
