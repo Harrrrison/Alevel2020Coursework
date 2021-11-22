@@ -23,7 +23,7 @@ def execute_query(connection, query):
 
 def create_database(connection):
     try:
-        file = open("Schema.sql")
+        file = open("Schema")
         query = file.read()
         connection.executescript(query)
     except sqlite3.Error as e:
@@ -40,3 +40,4 @@ def print_tables(connection):
 
 if __name__ == '__main__':
     print(".")
+    create_database(get_database_connection())

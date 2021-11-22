@@ -9,7 +9,7 @@ class logInpage(QtWidgets.QMainWindow):
     def __init__(self):
         super(logInpage, self).__init__()
         uic.loadUi('Log-in page.ui', self)
-
+        self.show()
         # Input boxes:
         self.nameInput = self.findChild(QtWidgets.QLineEdit, 'name_LineEdit')
         self.passwordInput = self.findChild(QtWidgets.QLineEdit, 'password_LineEdit')
@@ -23,7 +23,6 @@ class logInpage(QtWidgets.QMainWindow):
         self.logInButton.clicked.connect(self.validateUser)
         self.donthaveaccount = self.findChild(QtWidgets.QPushButton)
         self.donthaveaccount.clicked.connect(self.hide)
-        self.donthaveaccount.clicked.connect(SignUpPage.showSelf)
 
         # Classes:
 
@@ -34,7 +33,9 @@ class logInpage(QtWidgets.QMainWindow):
         # On button click it should switch window
         #
         print("done")
-        logInpage.show(logInpage())
+        nextWindow = SignUpPage()
+        nextWindow.show()
+        self.close()
 
     def validateUser(self):
         #

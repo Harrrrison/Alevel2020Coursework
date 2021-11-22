@@ -1,4 +1,5 @@
-from PyQt5 import uic, QtWidgets, QtGui
+from PyQt5 import uic, QtWidgets, QtGui, QtSql
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from Scripts.LogIn import *
 from Scripts.MainPage import *
 import sys
@@ -8,12 +9,13 @@ import sqlite3
 from sqlCode import *
 
 
+
 class SignUpPage(QtWidgets.QMainWindow):
     def __init__(self):
         super(SignUpPage, self).__init__()
         uic.loadUi('Sign up page.ui', self)
         self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')
-
+        create_database(get_database_connection())
         # Inputs:
         self.userNameInput = self.findChild(QtWidgets.QLineEdit, 'name_lineEdit')
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
@@ -31,24 +33,21 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.signedUpAlready.clicked.connect(self.switchwindow)
         self.signUpButton.clicked.connect(self.signupbuttonpressed)
         self.signedUpAlready.clicked.connect(self.testCase)
-        self.logInWindow = logInpage()
-        # self.mainPage = MainPage()
+
+        self.logInPage = logInpage()
+        # self.stackedWidget.addWidget(self.logInPage)
+        # when u have time please read this and do this https://stackoverflow.com/questions/60904814/how-to-change-window-widget-with-pyqt5-using-ui-files
+
 
         # getting second password input to verify matching
         self.show()
 
     def switchwindow(self):
-        self.hide()
-        self.logInWindow.show()
-        logInpage.showWindowClicked(logInpage())
+        print("window switch")
+        nextWindow = logInpage()
+        nextWindow.show()
+        self.close()
 
-    def showWindowClicked1(self):
-        print("done")
-        SignUpPage.show(SignUpPage())
-
-    def showSelf(self):
-        print("showself")
-        SignUpPage.show(SignUpPage())
 
     def testCase(self):
         print("test")
@@ -88,9 +87,10 @@ class SignUpPage(QtWidgets.QMainWindow):
         print(self.userNameInput.text())
         print(self.emailInput.text())
         print(self.password1.text())
+        execute_query(get_database_connection(), "INSERT INTO users (email, username, password) VALUES (self.emailInput, self.userNameInput, self.passwordhash());")
         self.database.append(self.userNameInput.text())
         self.database.append(self.emailInput.text())
-        self.database.append(self.passwordhash(self.password1))
+        self.database.append(self.passwordhash())
 
         print(self.database)
 
@@ -114,7 +114,7 @@ class SignUpPage(QtWidgets.QMainWindow):
             self.passwordError_label.setText('There is already a user with this email')
 
     def alreadyausercheck(self):
-        if self.emailInput == database:
+        if execute_query(get_database_connection(), "SELECT user FROM users WHERE user=self.userNameInput;"):
             #
             # Need to check database to see if they are already a user
             #
@@ -122,13 +122,15 @@ class SignUpPage(QtWidgets.QMainWindow):
         else:
             return False
 
-    def passwordhash(self, password):
+    def passwordhash(self):
         #
         # I will use a real hashing algorythm and store the it next to the username and email
         # This will be then used to retreve user log in details
         #
-        print(hashlib.sha256(password.hashlib.encode('UTF-8')).hexdigest())
-        print("Password hash...")
+        password1 = self.password1.text()
+        print("Hashing...")
+        return hashlib.sha256(password1.encode('UTF-8')).hexdigest()
+
 
     def usernamevalidation(self):
         if not (self.usernamenotinsystem()):
@@ -140,21 +142,29 @@ class SignUpPage(QtWidgets.QMainWindow):
             self.passwordError_label.setText('That username is already in use try anther one')
 
     def usernamenotinsystem(self):
-        if self.userNameInput == database:
-            #
-            # need to ensure that the username isnt in the system already
-            #
+        if execute_query(get_database_connection(), "SELECT user FROM users WHERE user=self.userNameInput;"):
             return False
         else:
             return True
 
 
+
+
+
+
 if __name__ == "__main__":
-    os.listdir ()
+    os.listdir()
     cwd = os.getcwd()  # Get the current working directory (cwd)
     files = os.listdir(cwd)  # Get all the files in that directory
     print("Files in %r: %s" % (cwd, files))
     app = QtWidgets.QApplication(sys.argv)
-    window = SignUpPage()
+    window1 = SignUpPage()
     app.exec_()
+    widget = QtWidgets.QStackedWidget()
+    logInWindow = logInpage()
+    # mainPage = MainPage()
 
+    window2 = SignUpPage()
+
+    widget.addWidget(logInWindow)
+    # widget.addWidget(mainPage)

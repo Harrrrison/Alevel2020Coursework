@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Schema" dialect="SQLite" />
+    <file url="file://$PROJECT_DIR$/Scripts/main.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/sqlCode.py" dialect="SQLite" />
   </component>
 </project>
