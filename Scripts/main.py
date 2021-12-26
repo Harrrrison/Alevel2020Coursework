@@ -13,7 +13,7 @@ class SignUpPage(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(SignUpPage, self).__init__()
-        uic.loadUi('Sign up page.ui', self)
+        uic.loadUi(r'C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Sign up page.ui', self)
         self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')
         self.passwordHelpButton = self.findChild(QtWidgets.QToolButton, 'passwordHelpButton')
         create_database(get_database_connection())

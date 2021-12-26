@@ -23,7 +23,14 @@ def execute_query(connection, query):
 
 def create_database(connection):
     try:
-        file = open("Schema")
+        # r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\
+        #Windows version
+        try:
+            file = open(r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Schema")
+        except FileNotFoundError:
+            file = open("Schema")
+
+
         query = file.read()
         connection.executescript(query)
     except sqlite3.Error as e:

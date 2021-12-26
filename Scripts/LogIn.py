@@ -15,7 +15,8 @@ class logInpage(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(logInpage, self).__init__()
-        uic.loadUi('Log-in page.ui', self)
+        # r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\
+        uic.loadUi(r'C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Log-in page.ui', self)
         # Input boxes:
         self.nameInput = self.findChild(QtWidgets.QLineEdit, 'name_LineEdit')
         self.passwordInput = self.findChild(QtWidgets.QLineEdit, 'password_LineEdit')
