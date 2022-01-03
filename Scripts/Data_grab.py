@@ -131,4 +131,3 @@ for gpu in gpus:
 print(tabulate(list_gpus, headers=("id", "name", "load", "free memory", "used memory", "total memory",
                                    "temperature", "uuid")))
 
-if __name__ == "__main__":
