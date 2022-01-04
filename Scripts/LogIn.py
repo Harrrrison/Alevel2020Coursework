@@ -6,9 +6,6 @@ import hashlib
 from Scripts.MainPage import *
 
 
-
-
-
 class logInpage(QtWidgets.QMainWindow):
     switch_window = QtCore.pyqtSignal()
 
