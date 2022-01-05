@@ -1,10 +1,9 @@
-from PyQt5 import uic, QtWidgets, QtGui, QtSql
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt6 import uic, QtWidgets, QtGui, QtSql
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from Scripts.LogIn import *
 import sys
 import os
 import hashlib
-import sqlite3
 from sqlCode import *
 
 
@@ -13,7 +12,8 @@ class SignUpPage(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(SignUpPage, self).__init__()
-        uic.loadUi(r'C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Sign up page.ui', self)
+        # uic.loadUi(r'C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Sign up page.ui', self)
+        uic.loadUi(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Sign Up Page.ui', self)
         self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')
         self.passwordHelpButton = self.findChild(QtWidgets.QToolButton, 'passwordHelpButton')
         create_database(get_database_connection())
@@ -21,9 +21,9 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.userNameInput = self.findChild(QtWidgets.QLineEdit, 'name_lineEdit')
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
         self.password1 = self.findChild(QtWidgets.QLineEdit, 'password_1')  # getting inital password input
-        self.password1.setEchoMode(QtWidgets.QLineEdit.Password)
+        # self.password1.setEchoMode(QtWidgets.QLineEdit)
         self.password2 = self.findChild(QtWidgets.QLineEdit, 'password_2')
-        self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
+        # self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
         self.database = []
 
         # Labels:
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     print("Files in %r: %s" % (cwd, files))
     app = QtWidgets.QApplication(sys.argv)
     window1 = SignUpPage()
-    app.exec_()
+    app.exec()
     widget = QtWidgets.QStackedWidget()
     logInWindow = logInpage()
     # mainPage = MainPage()

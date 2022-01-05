@@ -281,3 +281,12 @@ class data_grabbing():
 
     def get_GPU_temp(self, gpu):
         return gpu.temperature
+
+if __name__ == '__main__':
+    data_grabbing = data_grabbing()
+    data_grabbing.print_disk_details()
+    data_grabbing.print_GPU_info()
+    data_grabbing.print_memory_details()
+    data_grabbing.print_network_info()
+    data_grabbing.print_boot_time()
+    data_grabbing.print_system_info()

@@ -26,7 +26,8 @@ def create_database(connection):
         # r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\
         #Windows version
         try:
-            file = open(r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Schema")
+            # file = open(r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Schema")
+            file = open(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Schema')
         except FileNotFoundError:
             file = open("Schema")
 
@@ -36,14 +37,15 @@ def create_database(connection):
     except sqlite3.Error as e:
         print(f"The error '{e}' occurred")
 
-
+'''
 def print_tables(connection):
-    query = "SELECT name FROM sqlite_master WHERE type='table';"
+    query = f"SELECT email FROM sqlite_master WHERE type='table';"
     tables = execute_query(connection, query)
     tables_list = []
     for item in tables:
         tables_list.append(item[0])
     print(tables_list)
+'''
 
 if __name__ == '__main__':
     print(".")
