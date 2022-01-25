@@ -1,6 +1,10 @@
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 import sys
 import matplotlib
+from PyQt6.QtNetwork.QUdpSocket import kwargs
+
+from Data_grabber_functions import *
+from datetime import datetime
 
 matplotlib.use('Qt5Agg')
 import os
@@ -19,24 +23,56 @@ class MainPage(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super(MainPage, self).__init__(*args, **kwargs)
+        self.Data_grabber_functions = data_grabbing()
+        self.now = datetime.now()
+        self.current_time = self.now.strftime("%H:%M:%S")
 
-        sc = MplCanvas(self, width=5, height=4, dpi=100)
-        sc.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+        self.sc = MplCanvas(self, width=5, height=5, dpi=100)
+        self.xaxis = []
+        self.yaxis = []
+        # self.sc.axes.plot([1, 4, 6, 7], [10, 4, 2, 6])
+        self.sc.axes.plot([self.current_time], [self.Data_grabber_functions.get_available_memory()])
 
         # Create toolbar, passing canvas as first parament, parent (self, the MainWindow) as second.
-        toolbar = NavigationToolbar(sc, self)
+        toolbar = NavigationToolbar(self.sc, self)
 
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(toolbar)
-        layout.addWidget(sc)
+        layout.addWidget(self.sc)
 
         # Create a placeholder widget to hold our toolbar and canvas.
         widget = QtWidgets.QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
+        self._plot_ref = None
+        self.update_graph()
+
         self.show()
 
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(1)
+        self.timer.timeout.connect(self.update_graph)
+        self.timer.start()
+
+    def update_graph(self):
+        self.xaxis.append(self.current_time)
+        # self.yaxis.append(self.Data_grabber_functions.get_available_memory())
+
+        self.yaxis = self.yaxis[1:] + [self.Data_grabber_functions.get_available_memory()]
+
+        if self._plot_ref is None:
+
+            plot_refs = self.sc.axes.plot(self.xaxis, self.yaxis, 'r')
+            self._plot_ref = plot_refs[0]
+            xmin, xmax, ymin, ymax = self.sc.axis(**kwargs)
+            self.sc.ax.set(xlim=(xmin, xmax), ylim=(ymin, ymax))
+
+        else:
+
+            self._plot_ref.set_ydata(self.yaxis)
+
+        self.sc.draw()
     '''
     def __init__(self):
         super(MainPage, self).__init__()

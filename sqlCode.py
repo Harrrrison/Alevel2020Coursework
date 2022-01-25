@@ -30,6 +30,7 @@ def create_database(connection):
             file = open(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Schema')
         except FileNotFoundError:
             file = open("Schema")
+            print("file not found")
 
 
         query = file.read()
