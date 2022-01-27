@@ -2,6 +2,7 @@ import sys
 import random
 import matplotlib
 import matplotlib.pyplot as plt
+from PyQt6.QtWidgets import QHBoxLayout, QComboBox
 from matplotlib.pyplot import ylim
 
 matplotlib.use('Qt5Agg')
@@ -39,12 +40,27 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
         self.setCentralWidget(self.canvas)
 
+        self.canvas2 = MplCanvas(self,width=5, height=4, dpi=100)
+
+        self.color = 'b'
+        self.canvas.set_facecolor("blue")
+        #self.setStyleSheet("background-color: rgb(16, 24, 32);")
+        self.canvas.title('123')
+
+        layout = QHBoxLayout()
+        self.cb = QComboBox()
+        self.cb.addItems(["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson"])
+        self.cb.currentIndexChanged.connect(self.changeColor)
+
+
 
         toolbar = NavigationToolbar(self.canvas, self)
 
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(toolbar)
         layout.addWidget(self.canvas)
+        layout.addWidget(self.canvas2)
+        layout.addWidget(self.cb)
 
         # Create a placeholder widget to hold our toolbar and canvas.
         widget = QtWidgets.QWidget()
@@ -75,10 +91,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ydata = self.ydata[1:] + [self.Data_grabber_functions.get_available_memory()]
         self.xdata = self.xdata[1:] + [self.current_time]
         self.canvas.axes.cla()
-        self.canvas.axes.plot(self.xdata, self.ydata, 'b', label="memory")
+        self.canvas.axes.plot(self.xdata, self.ydata, self.color, label="memory")
         # Trigger the canvas to update and redraw.
 
         self.canvas.draw()
+
+    def changeColor(self):
+        self.color = self.cb.currentText()
 
     def update_time(self):
         self.now = datetime.now()
