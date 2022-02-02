@@ -25,8 +25,6 @@ class MplCanvas(FigureCanvas):
         super(MplCanvas, self).__init__(fig)
 
 
-
-
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
@@ -40,19 +38,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
         self.setCentralWidget(self.canvas)
 
-        self.canvas2 = MplCanvas(self,width=5, height=4, dpi=100)
+        self.canvas2 = MplCanvas(self, width=5, height=4, dpi=100)
 
+        # self.ax = plt.axes()
+
+        '''Styling'''
         self.color = 'b'
-        self.canvas.set_facecolor("blue")
-        #self.setStyleSheet("background-color: rgb(16, 24, 32);")
-        self.canvas.title('123')
+        # self.ax.set_facecolor("blue")
+        # self.setStyleSheet("background-color: rgb(16, 24, 32);")
+        # self.ax.title('123')
 
         layout = QHBoxLayout()
+
+        '''Combo box'''
         self.cb = QComboBox()
         self.cb.addItems(["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson"])
         self.cb.currentIndexChanged.connect(self.changeColor)
-
-
 
         toolbar = NavigationToolbar(self.canvas, self)
 
@@ -71,24 +72,29 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.xdata = [0,1,2,3,4,5,6,7,8,9,10,11,12,self.current_time]
         # self.ydata = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
         self.xdata = list(range(n_data))
-        self.ydata = [self.Data_grabber_functions.get_available_memory() for i in range(n_data)]
+        self.ydata = [self.Data_grabber_functions.get_percent_memory() for i in range(n_data)]
+
+        self.xdata2 = list(range(n_data))
+        self.ydata2 = [self.Data_grabber_functions.get_total_CPU_usage() for i in range(n_data)]
 
         plt.rc('font', size=10)
 
-        self.update_plot()
+        self.update_plot_memory_available()
+        self.update_plot_CPU_usage()
 
         self.show()
 
-        # Setup a timer to trigger the redraw by calling update_plot.
+        # Set up a timer to trigger the graph to be redrawn by calling update_plot.
         self.timer = QtCore.QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.update_time)
-        self.timer.timeout.connect(self.update_plot)
+        self.timer.timeout.connect(self.update_plot_memory_available)
+        self.timer.timeout.connect(self.update_plot_CPU_usage)
         self.timer.start()
 
-    def update_plot(self):
+    def update_plot_memory_available(self):
         # Drop off the first y element, append a new one.
-        self.ydata = self.ydata[1:] + [self.Data_grabber_functions.get_available_memory()]
+        self.ydata = self.ydata[1:] + [self.Data_grabber_functions.get_percent_memory()]
         self.xdata = self.xdata[1:] + [self.current_time]
         self.canvas.axes.cla()
         self.canvas.axes.plot(self.xdata, self.ydata, self.color, label="memory")
@@ -96,12 +102,23 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.canvas.draw()
 
+    def update_plot_CPU_usage(self):
+        # Drop off the first y element, append a new one.
+        self.ydata2 = self.ydata2[1:] + [self.Data_grabber_functions.get_total_CPU_usage()]
+        self.xdata2 = self.xdata2[1:] + [self.current_time]
+        self.canvas2.axes.cla()
+        self.canvas2.axes.plot(self.xdata2, self.ydata2, self.color, label="memory")
+        # Trigger the canvas to update and redraw.
+
+        self.canvas2.draw()
+
     def changeColor(self):
         self.color = self.cb.currentText()
 
     def update_time(self):
         self.now = datetime.now()
         self.current_time = self.now.strftime("%H:%M:%S")
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
