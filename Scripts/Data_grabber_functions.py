@@ -234,10 +234,19 @@ class data_grabbing():
         print(f"Total Bytes Sent: {self.get_size(net_io.bytes_sent)}")
         print(f"Total Bytes Received: {self.get_size(net_io.bytes_recv)}")
 
+    def get_bytes_sent(self):
+        net_io = psutil.net_io_counters()
+        return self.get_size(net_io.bytes_sent)
+
+    def get_bytes_recv(self):
+        net_io = psutil.net_io_counters()
+        return self.get_size(net_io.bytes_recv)
+
+
     # NEED TO GET THE NETWORKING GET FUNCTIONS WORKING ASAP, THEY NEED TO BE IMPLEMENTED IN A LOOP IN THE MAIN
 
     def print_GPU_info(self):
-        print("=" * 40, "GPU Details", "=" * 40)
+        print("*" * 40, "GPU", "*" * 40)
         gpus = GPUtil.getGPUs()
         list_gpus = []
         for gpu in gpus:

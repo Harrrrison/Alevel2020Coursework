@@ -40,6 +40,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.canvas2 = MplCanvas(self, width=5, height=4, dpi=100)
 
+        self.canvas_3 = MplCanvas(self, width=5, height=4, dpi=100)
+
         # self.ax = plt.axes()
 
         '''Styling'''
@@ -52,8 +54,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         '''Combo box'''
         self.cb = QComboBox()
-        self.cb.addItems(["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson"])
-        self.cb.currentIndexChanged.connect(self.changeColor)
+        self.cb.addItems(["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson", 'Purple', 'darkviolet'])
+        self.cb.currentIndexChanged.connect(self.changecolor)
 
         toolbar = NavigationToolbar(self.canvas, self)
 
@@ -61,6 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(toolbar)
         layout.addWidget(self.canvas)
         layout.addWidget(self.canvas2)
+        layout.addWidget(self.canvas_3)
         layout.addWidget(self.cb)
 
         # Create a placeholder widget to hold our toolbar and canvas.
@@ -77,10 +80,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.xdata2 = list(range(n_data))
         self.ydata2 = [self.Data_grabber_functions.get_total_CPU_usage() for i in range(n_data)]
 
+        self.xdata_bytes_sent = list(range(n_data))
+        self.ydata_bytes_sent = [self.Data_grabber_functions.get_bytes_sent() for i in range(n_data)]
+
+        self.xdata_bytes_recv = list(range(n_data))
+        self.ydata_bytes_recv = [self.Data_grabber_functions.get_bytes_recv() for i in range(n_data)]
+
+        self.xdata_swap_percent = list(range(n_data))
+        self.ydata_swap_percent = [self.Data_grabber_functions.get_swap_percent_memory() for i in range(n_data)]
+
         plt.rc('font', size=10)
 
         self.update_plot_memory_available()
         self.update_plot_CPU_usage()
+        # self.update_plot_swap_percent()
+        self.update_plot_bytes_recv()
 
         self.show()
 
@@ -90,29 +104,61 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.update_time)
         self.timer.timeout.connect(self.update_plot_memory_available)
         self.timer.timeout.connect(self.update_plot_CPU_usage)
+        # self.timer.timeout.connect(self.update_plot_swap_percent)
+        self.timer.timeout.connect(self.update_plot_bytes_recv)
+
+
+
+        # self.timer.timeout.connect(self.update_plot_bytes_sent)
+
         self.timer.start()
 
     def update_plot_memory_available(self):
-        # Drop off the first y element, append a new one.
+
         self.ydata = self.ydata[1:] + [self.Data_grabber_functions.get_percent_memory()]
         self.xdata = self.xdata[1:] + [self.current_time]
         self.canvas.axes.cla()
         self.canvas.axes.plot(self.xdata, self.ydata, self.color, label="memory")
-        # Trigger the canvas to update and redraw.
 
         self.canvas.draw()
 
     def update_plot_CPU_usage(self):
-        # Drop off the first y element, append a new one.
+
         self.ydata2 = self.ydata2[1:] + [self.Data_grabber_functions.get_total_CPU_usage()]
         self.xdata2 = self.xdata2[1:] + [self.current_time]
         self.canvas2.axes.cla()
         self.canvas2.axes.plot(self.xdata2, self.ydata2, self.color, label="memory")
-        # Trigger the canvas to update and redraw.
+
 
         self.canvas2.draw()
 
-    def changeColor(self):
+    def update_plot_bytes_sent(self):
+
+        self.ydata_bytes_sent = self.ydata_bytes_sent[1:] + [self.Data_grabber_functions.get_bytes_sent()]
+        self.xdata_bytes_sent = self.xdata_bytes_sent[1:] + [self.current_time]
+        self.canvas_3.axes.cla()
+        self.canvas_3.axes.plot(self.xdata_bytes_sent, self.ydata_bytes_sent, self.color, label="memory")
+
+        self.canvas_3.draw()
+
+    def update_plot_bytes_recv(self):
+        self.ydata_bytes_recv = self.ydata_bytes_recv[1:] + [self.Data_grabber_functions.get_bytes_recv()]
+        self.xdata_bytes_recv = self.xdata_bytes_recv[1:] + [self.current_time]
+        self.canvas_3.axes.cla()
+        self.canvas_3.axes.plot(self.xdata_bytes_recv, self.ydata_bytes_recv, self.color, label="memory")
+
+        self.canvas_3.draw()
+
+    def update_plot_swap_percent(self):
+
+        self.ydata_swap_percent = self.ydata_swap_percent[1:] + [self.Data_grabber_functions.get_swap_percent_memory()]
+        self.xdata_swap_percent = self.xdata_swap_percent[1:] + [self.current_time]
+        self.canvas_3.axes.cla()
+        self.canvas_3.axes.plot(self.xdata_swap_percent, self.ydata_swap_percent, self.color, label="memory")
+
+        self.canvas_3.draw()
+
+    def changecolor(self):
         self.color = self.cb.currentText()
 
     def update_time(self):
