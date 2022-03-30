@@ -2,7 +2,7 @@ import sys
 import random
 import matplotlib
 import matplotlib.pyplot as plt
-from PyQt6.QtWidgets import QHBoxLayout, QComboBox
+from PyQt6.QtWidgets import QHBoxLayout, QComboBox, QTableWidgetItem, QTableWidget, QVBoxLayout, QWidget
 from matplotlib.pyplot import ylim
 
 matplotlib.use('Qt5Agg')
@@ -16,6 +16,44 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 
 from matplotlib.figure import Figure
 
+class partsTable(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.Data_grabber_functions = data_grabbing()
+
+        self.createTable()
+
+    def createTable(self):
+        vbox = QVBoxLayout()
+
+        # add table
+        table = QTableWidget(self)
+        table.setColumnCount(6)
+        table.setRowCount(1)
+
+        table.setHorizontalHeaderLabels(['System', 'Node Name', 'Release', 'Version', 'Machine', 'Processor'])
+        table_data = []
+
+        data = [self.Data_grabber_functions.get_system_name(), self.Data_grabber_functions.get_system_node(),
+                self.Data_grabber_functions.get_system_release(),
+                self.Data_grabber_functions.get_system_version(),
+                self.Data_grabber_functions.get_system_machine(),
+                self.Data_grabber_functions.get_system_processor()]
+
+        table_data.append(data)
+
+        row = 0
+        for r in table_data:
+            col = 0
+            for item in r:
+                cell = QTableWidgetItem(str(item))
+                table.setItem(row, col, cell)
+                col += 1
+            row += 1
+        vbox.addWidget(table)
+        self.setLayout(vbox)
+        self.setGeometry(300, 400, 500, 400)
+        self.show()
 
 class MplCanvas(FigureCanvas):
 
@@ -30,6 +68,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
+        self.table_of_system_info = partsTable()
         self.Data_grabber_functions = data_grabbing()
 
         self.now = datetime.now()
@@ -65,6 +104,7 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.canvas2)
         layout.addWidget(self.canvas_3)
         layout.addWidget(self.cb)
+        layout.addWidget(self.table_of_system_info)
 
         # Create a placeholder widget to hold our toolbar and canvas.
         widget = QtWidgets.QWidget()

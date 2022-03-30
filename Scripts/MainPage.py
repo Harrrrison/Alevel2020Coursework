@@ -1,7 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 import sys
 import matplotlib
-from PyQt6.QtNetwork.QUdpSocket import kwargs
+# from PyQt6.QtNetwork.QUdpSocket import kwargs
 
 from Data_grabber_functions import *
 from datetime import datetime
