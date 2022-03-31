@@ -32,7 +32,7 @@ class partsTable(QWidget):
         table.setRowCount(1)
 
         table.setHorizontalHeaderLabels(['System', 'Node Name', 'Release', 'Version', 'Machine', 'Processor'])
-        table_data = []
+        table_values = []
 
         data = [self.Data_grabber_functions.get_system_name(), self.Data_grabber_functions.get_system_node(),
                 self.Data_grabber_functions.get_system_release(),
@@ -40,16 +40,16 @@ class partsTable(QWidget):
                 self.Data_grabber_functions.get_system_machine(),
                 self.Data_grabber_functions.get_system_processor()]
 
-        table_data.append(data)
+        table_values.append(data)
 
         row = 0
-        for r in table_data:
+        for i in table_values:
             col = 0
-            for item in r:
-                cell = QTableWidgetItem(str(item))
-                table.setItem(row, col, cell)
+            for item in i:
+                table.setItem(row, col, QTableWidgetItem(str(item)))
                 col += 1
             row += 1
+
         vbox.addWidget(table)
         self.setLayout(vbox)
         self.setGeometry(300, 400, 500, 400)
