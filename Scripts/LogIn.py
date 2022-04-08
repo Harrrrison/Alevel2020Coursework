@@ -4,7 +4,7 @@ import sqlite3
 from sqlCode import *
 import hashlib
 from Scripts.MainPage import *
-
+from Scripts.ClearAndRedraw import *
 
 class logInpage(QtWidgets.QMainWindow):
     switch_window = QtCore.pyqtSignal()
@@ -14,7 +14,7 @@ class logInpage(QtWidgets.QMainWindow):
         super(logInpage, self).__init__()
         # r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\
         # uic.loadUi(r'C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Log-in page.ui', self)
-        uic.loadUi('Log-in page.ui', self)
+        uic.loadUi(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Log-in page.ui', self)
         # Input boxes:
         self.nameInput = self.findChild(QtWidgets.QLineEdit, 'name_LineEdit')
         self.passwordInput = self.findChild(QtWidgets.QLineEdit, 'password_LineEdit')
@@ -27,10 +27,10 @@ class logInpage(QtWidgets.QMainWindow):
         self.logInButton = self.findChild(QtWidgets.QPushButton, 'logInButton')
         self.logInButton.clicked.connect(self.validateUser)
         self.donthaveaccount = self.findChild(QtWidgets.QPushButton)
+        #self.donthaveaccount.clicked.connect(self.showWindowClicked)
         self.donthaveaccount.clicked.connect(self.showWindowClicked)
 
-        # Classes:
-        mainWindow = MainPage()
+
 
 
 
@@ -87,6 +87,9 @@ class logInpage(QtWidgets.QMainWindow):
         password1 = self.passwordInput.text()
         print("Hashing...")
         return hashlib.sha256(password1.encode('UTF-8')).hexdigest()
+
+    def openMain(self):
+        window = MainWindow()
 
 
 

@@ -10,7 +10,7 @@ from sqlCode import *
 
 class database(QtWidgets):
     def __init__(self):
-        self.QSqlDatabase.addDatabase("QMYSQL")
+        #self.QSqlDatabase.addDatabase("QMYSQL")
         self.db.setHostName("DataMonitor")
         self.db.setDatabaseName("UserDetails")
         self.db.setUserName("Harrison")

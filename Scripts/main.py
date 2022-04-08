@@ -1,10 +1,13 @@
 from PyQt6 import uic, QtWidgets, QtGui, QtSql
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import *
+
+import sqlCode
 from Scripts.LogIn import *
 import sys
 import os
 import hashlib
 from sqlCode import *
+from Scripts.ClearAndRedraw import *
 
 
 class SignUpPage(QtWidgets.QMainWindow):
@@ -17,6 +20,12 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.signUpButton = self.findChild(QtWidgets.QPushButton, 'signUpButton')
         self.passwordHelpButton = self.findChild(QtWidgets.QToolButton, 'passwordHelpButton')
         create_database(get_database_connection())
+
+        # Global varibles:
+        self.checkBoxState = False
+        # Backup database list
+        self.database = []
+
         # Inputs:
         self.userNameInput = self.findChild(QtWidgets.QLineEdit, 'name_lineEdit')
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
@@ -24,19 +33,22 @@ class SignUpPage(QtWidgets.QMainWindow):
         # self.password1.setEchoMode(QtWidgets.QLineEdit)
         self.password2 = self.findChild(QtWidgets.QLineEdit, 'password_2')
         # self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.database = []
 
         # Labels:
-        self.termsOfUse = self.findChild(QtWidgets.QCheckBox, 'termsOfUse')
+
         self.passwordError_label = self.findChild(QtWidgets.QLabel, 'passwordError_label')
         self.termsOfUseMessage = self.findChild(QtWidgets.QLabel, 'termsOfUseMessage')
         self.signedUpAlready = self.findChild(QtWidgets.QPushButton, 'hasAccount')
 
         # Buttons:
-        self.signedUpAlready.clicked.connect(self.switchwindow)
-        self.signUpButton.clicked.connect(self.signupbuttonpressed)
         self.signedUpAlready.clicked.connect(self.testCase)
-        self.signedUpAlready.clicked.connect(self.passwordVisibilty)
+        self.termsOfUse = self.findChild(QtWidgets.QCheckBox, 'termsOfUse')
+        # self.signedUpAlready.clicked.connect(self.switchwindow)
+        # self.signedUpAlready.clicked.connect(self.openMainWindow)
+        self.signUpButton.clicked.connect(self.signupbuttonpressed)
+        self.termsOfUse.stateChanged.connect(self.termsnandconditionsToggle)
+
+
         # self.logInPage = logInpage()
         # self.stackedWidget.addWidget(self.logInPage)
         # when u have time please read this and do this https://stackoverflow.com/questions/60904814/how-to-change-window-widget-with-pyqt5-using-ui-files
@@ -47,27 +59,38 @@ class SignUpPage(QtWidgets.QMainWindow):
     def switchwindow(self):
         print("window switch")
 
-
         self.cams = logInpage()
         self.cams.show()
         self.close()
 
     def testCase(self):
-        print("test")
+        userName = self.userNameInput.text()
+        print(userName)
+        if username_validation(get_database_connection(), str(userName)):
+            self.termsOfUseMessage.setText('This user name is already in use')
+            print("username invalid")
+            return False
+        else:
+            self.termsOfUseMessage.setText(' ')
+            print("username valid")
+            return True
 
     def passwordVisibilty(self):
-        self.password1.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
+        pass
+        # self.password1.setEchoMode(QtWidgets.QLineEdit.password)
+        # self.password2.setEchoMode(QtWidgets.QLineEdit.password)
 
     def signupbuttonpressed(self):
         print('password 1: ' + self.password1.text())
         print('password 2: ' + self.password2.text())
-        if self.passwordvalidation(
-                self.matchingpasswordvalidation()) and self.alreadyausercheck() and self.emailvalidation():
+        if (self.passwordvalidation(
+                self.matchingpasswordvalidation()) == True) and (
+                self.alreadyausercheck() == True) and (
+                self.emailvalidation() == True) and (
+                self.termsandconditionscheck()):
             print("Valid")
             self.passwordhash()
             self.addtodatabase()
-
 
     def matchingpasswordvalidation(self):
         if self.password1.text() != self.password2.text():  # making sure the passwords match
@@ -76,7 +99,7 @@ class SignUpPage(QtWidgets.QMainWindow):
             return False
         else:
             self.termsOfUseMessage.setText(' ')
-        # showing that the passwords are matching ensuring that neither are stored
+            # showing that the passwords are matching ensuring that neither are stored
             return True  # showing that they arnt matching
 
     def passwordvalidation(self, matching):  # I could have the mathcing validation outside of the function??
@@ -109,15 +132,21 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.database.append(self.emailInput.text())
         self.database.append(self.passwordhash())
 
-
         print(self.database)
+        self.openMainWindow()
 
+    def termsnandconditionsToggle(self):
+        if self.checkBoxState == True:
+            self.checkBoxState = False
+        else:
+            self.checkBoxState = True
 
-    def termandconditionscheck(self):
-        if self.termsOfUse.isChecked():
+    def termsandconditionscheck(self):
+        if self.checkBoxState == True:
+            print("T&C true")
             return True
         else:
-            self.termsOfUseMessage.setText('You must agree to the T&C')
+            print("T&C False")
             return False
 
     def emailvalidation(self):
@@ -132,59 +161,38 @@ class SignUpPage(QtWidgets.QMainWindow):
             return False
         else:
             email = self.emailInput.text()
-            if email != execute_query(get_database_connection(), f"SELECT email FROM users WHERE email = '{email}';"):
-                print(type(self.passwordError_label))
-                self.termsOfUseMessage.setText('')
-                return True
+            if email_validation(get_database_connection(), email):
+                self.termsOfUseMessage.setText(' ')
+                print('Email invalid')
+                return False
             else:
                 self.termsOfUseMessage.setText('This email is already in use')
-                return False
-    def alreadyausercheck(self):
-        print("already a user check")
-        try:
-            userName = self.userNameInput.text()
-            if userName == execute_query(get_database_connection(), f"SELECT username FROM users WHERE username = '{userName}';"):
-                print(type(self.passwordError_label))
-                self.termsOfUseMessage.setText('username is already in use')
-
-                return False
-            else:
-                self.termsOfUseMessage.setText(' ')
+                print("Email valid")
                 return True
 
-            #
-            # Need to check database to see if they are already a user
-            #
-        except sqlite3.Error as e:
-            print(f"The error '{e}' occurred")
-            self.termsOfUseMessage.setText('username is already in use')
+    def alreadyausercheck(self):
+        print("already a user check")
+        userName = self.userNameInput.text()
+        print(userName)
+        if username_validation(get_database_connection(), str(userName)):
+            self.termsOfUseMessage.setText('This user name is already in use')
+            print("username invalid")
             return False
+        else:
+            self.termsOfUseMessage.setText(' ')
+            print("username valid")
+            return True
 
     def passwordhash(self):
-        #
-        # I will use a real hashing algorythm and store the it next to the username and email
-        # This will be then used to retreve user log in details
-        #
         password1 = self.password1.text()
         print("Hashing...")
         return hashlib.sha256(password1.encode('UTF-8')).hexdigest()
 
-    def usernamevalidation(self):
-        if not (self.usernamenotinsystem()):
-            #
-            # continue the validation of the user name, char lenght data type etc.
-            #
-            return True
-        else:
-            self.passwordError_label.setText('That username is already in use try anther one')
 
-    def systemValidation(self):
-        if self.usernamevalidation() and self.emailvalidation() and self.termandconditionscheck():
-            return True
-        else:
-            return False
-
-
+    def openMainWindow(self):
+        self.cams = MainWindow()
+        self.cams.show()
+        self.close()
 
 
 if __name__ == "__main__":
