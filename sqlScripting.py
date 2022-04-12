@@ -1,7 +1,6 @@
 from PyQt5 import uic, QtWidgets, QtGui, QtSql, QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from Scripts.LogIn import *
-from Scripts.MainPage import *
 import sys
 import os
 import hashlib

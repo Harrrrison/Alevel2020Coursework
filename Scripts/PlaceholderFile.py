@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets, QtCore, QtGui
 
 class signUpWindow(object):
 
@@ -126,7 +126,7 @@ class signUpWindow(object):
         print(user_credentials)
 
 
-if __name__ == "__PlaceholderFile__":
+if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)

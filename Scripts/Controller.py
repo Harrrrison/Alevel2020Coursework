@@ -1,7 +1,6 @@
 from Scripts.LogIn import logInpage
 from Scripts.main import *
 from Scripts.LogIn import *
-from Scripts.MainPage import *
 
 
 class Controller:

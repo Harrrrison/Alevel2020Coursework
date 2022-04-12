@@ -85,6 +85,7 @@ def email_validation(connection, email):
         print("invalid email")
         return False
 
+
 def validation(connection, query):
     tables = execute_query(connection, query)
     tables_list = []
@@ -94,6 +95,24 @@ def validation(connection, query):
         print(tables_list)
         return True
     except:
+        return False
+
+
+def username_and_password_validation(connection, username, hashedPassword):
+    query = f"SELECT password FROM users WHERE username == ('{username}') ;"
+    tables = execute_query(connection, query)
+    tables_list = []
+    try:
+        print(tables_list)
+        for item in tables:
+            tables_list.append(item)
+        if hashedPassword == item:
+            return True
+        else:
+            print("username not matching password")
+            return False
+    except:
+        print("username not in system")
         return False
 
 

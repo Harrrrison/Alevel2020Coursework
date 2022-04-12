@@ -50,11 +50,12 @@ class partsTable(QWidget):
                 col += 1
             row += 1
 
+        for i in range(5):
+            table.resizeColumnToContents(i)
+
         vbox.addWidget(table)
         self.setLayout(vbox)
-        self.setGeometry(300, 400, 500, 400)
         self.show()
-
 class MplCanvas(FigureCanvas):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -75,12 +76,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.current_time = self.now.strftime("%H:%M:%S")
 
         self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
+        self.canvas.axes.set_ylabel("% RAM used")
         self.setCentralWidget(self.canvas)
 
         self.canvas2 = MplCanvas(self, width=5, height=4, dpi=100)
+        #self.canvas2.title("% CPU used")
 
         self.canvas_3 = MplCanvas(self, width=5, height=4, dpi=100)
+       # self.canvas_3.title("Bytes received")
 
+        self.canvas_3_type = ""
+        self.time_interval = 1000
         # self.ax = plt.axes()
 
         '''Styling'''
@@ -91,20 +97,38 @@ class MainWindow(QtWidgets.QMainWindow):
 
         layout = QHBoxLayout()
 
-        '''Combo box'''
+        '''Combo box to change color'''
         self.cb = QComboBox()
         self.cb.addItems(["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson", 'Purple', 'darkviolet'])
         self.cb.currentIndexChanged.connect(self.changecolor)
 
-        toolbar = NavigationToolbar(self.canvas, self)
+        '''Third graph combo box'''
+        self.cb2 = QComboBox()
+        self.cb2.addItems(
+            ["Bytes received", "Bytes sent", "Swap %"])
+        self.cb2.currentIndexChanged.connect(self.change_graph)
 
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(toolbar)
-        layout.addWidget(self.canvas)
-        layout.addWidget(self.canvas2)
-        layout.addWidget(self.canvas_3)
-        layout.addWidget(self.cb)
-        layout.addWidget(self.table_of_system_info)
+        '''Graph update combo box'''
+        self.cb3 = QComboBox()
+        self.cb3.addItems(
+            ["1000", "500", "2500", "5000", "10000", "60000"])
+        self.cb3.currentIndexChanged.connect(self.update_time_interval)
+
+        toolbar = NavigationToolbar(self.canvas, self)
+        toolbar2 = NavigationToolbar(self.canvas2, self)
+        toolbar3 = NavigationToolbar(self.canvas_3, self)
+
+        layout = QtWidgets.QGridLayout()
+        layout.addWidget(toolbar, 0, 0, 1, 3)
+        layout.addWidget(self.canvas, 1, 0, 1, 3)
+        layout.addWidget(toolbar2, 2, 0, 1, 3)
+        layout.addWidget(self.canvas2, 3, 0, 1, 3)
+        layout.addWidget(toolbar3, 4, 0, 1, 3)
+        layout.addWidget(self.canvas_3, 5, 0, 1, 3)
+        layout.addWidget(self.cb2, 6, 0)
+        layout.addWidget(self.cb3, 6, 1)
+        layout.addWidget(self.cb, 6, 2)
+        layout.addWidget(self.table_of_system_info, 7,0, 1, 3)
 
         # Create a placeholder widget to hold our toolbar and canvas.
         widget = QtWidgets.QWidget()
@@ -136,16 +160,16 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.update_plot_swap_percent()
         self.update_plot_bytes_recv()
 
-        self.show()
+        self.showFullScreen()
 
         # Set up a timer to trigger the graph to be redrawn by calling update_plot.
         self.timer = QtCore.QTimer()
-        self.timer.setInterval(1000)
+        self.timer.setInterval(self.time_interval)
         self.timer.timeout.connect(self.update_time)
         self.timer.timeout.connect(self.update_plot_memory_available)
         self.timer.timeout.connect(self.update_plot_CPU_usage)
         # self.timer.timeout.connect(self.update_plot_swap_percent)
-        self.timer.timeout.connect(self.update_plot_bytes_recv)
+        self.timer.timeout.connect(self.change_graph)
 
 
 
@@ -158,6 +182,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ydata = self.ydata[1:] + [self.Data_grabber_functions.get_percent_memory()]
         self.xdata = self.xdata[1:] + [self.current_time]
         self.canvas.axes.cla()
+        self.canvas.axes.set_title("% RAM used")
         self.canvas.axes.plot(self.xdata, self.ydata, self.color, label="memory")
 
         self.canvas.draw()
@@ -167,6 +192,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ydata2 = self.ydata2[1:] + [self.Data_grabber_functions.get_total_CPU_usage()]
         self.xdata2 = self.xdata2[1:] + [self.current_time]
         self.canvas2.axes.cla()
+        self.canvas2.axes.set_title("% CPU used")
         self.canvas2.axes.plot(self.xdata2, self.ydata2, self.color, label="memory")
 
 
@@ -177,6 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ydata_bytes_sent = self.ydata_bytes_sent[1:] + [self.Data_grabber_functions.get_bytes_sent()]
         self.xdata_bytes_sent = self.xdata_bytes_sent[1:] + [self.current_time]
         self.canvas_3.axes.cla()
+        self.canvas_3.axes.set_title("Bytes sent")
         self.canvas_3.axes.plot(self.xdata_bytes_sent, self.ydata_bytes_sent, self.color, label="memory")
 
         self.canvas_3.draw()
@@ -185,6 +212,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ydata_bytes_recv = self.ydata_bytes_recv[1:] + [self.Data_grabber_functions.get_bytes_recv()]
         self.xdata_bytes_recv = self.xdata_bytes_recv[1:] + [self.current_time]
         self.canvas_3.axes.cla()
+        self.canvas_3.axes.set_title("Bytes received")
         self.canvas_3.axes.plot(self.xdata_bytes_recv, self.ydata_bytes_recv, self.color, label="memory")
 
         self.canvas_3.draw()
@@ -194,9 +222,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ydata_swap_percent = self.ydata_swap_percent[1:] + [self.Data_grabber_functions.get_swap_percent_memory()]
         self.xdata_swap_percent = self.xdata_swap_percent[1:] + [self.current_time]
         self.canvas_3.axes.cla()
+        self.canvas_3.axes.set_title("Swap %")
         self.canvas_3.axes.plot(self.xdata_swap_percent, self.ydata_swap_percent, self.color, label="memory")
 
         self.canvas_3.draw()
+
+    def change_graph(self):
+        self.canvas_3_type = self.cb2.currentText()
+        self.canvas_3.axes.cla()
+        if self.canvas_3_type == "Bytes sent":
+            self.update_plot_bytes_sent()
+        elif self.canvas_3_type == "Bytes received":
+            self.update_plot_bytes_recv()
+        elif self.canvas_3_type == "Swap %":
+            self.update_plot_swap_percent()
 
     def changecolor(self):
         self.color = self.cb.currentText()
@@ -204,6 +243,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_time(self):
         self.now = datetime.now()
         self.current_time = self.now.strftime("%H:%M:%S")
+
+    def update_time_interval(self):
+        self.time_interval = int(self.cb3.currentText())
+        self.timer.setInterval(self.time_interval)
+
 
 
 if __name__ == '__main__':

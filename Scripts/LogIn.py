@@ -3,7 +3,6 @@ import sys
 import sqlite3
 from sqlCode import *
 import hashlib
-from Scripts.MainPage import *
 from Scripts.ClearAndRedraw import *
 
 class logInpage(QtWidgets.QMainWindow):
@@ -31,6 +30,8 @@ class logInpage(QtWidgets.QMainWindow):
         self.donthaveaccount.clicked.connect(self.showWindowClicked)
 
 
+        self.show()
+
 
 
 
@@ -41,19 +42,10 @@ class logInpage(QtWidgets.QMainWindow):
         print("show")
 
     def validateUser(self):
-        #
-        # needs to have database password validation
-        #
-        if self.getUserInput():
-            if self.checkPassword():
-                self.mainWindow.show()
-                self.close()
-
-
+        if self.alreadyausercheck():
+            self.openMainWindow()
         else:
-            self.errorLabel.setText("Incorrect password for this account")
-
-
+            self.errorLabel.setText('user not valid')
     def getUserInput(self):
         try:
             userName = self.nameInput.text()
@@ -83,14 +75,26 @@ class logInpage(QtWidgets.QMainWindow):
             print(f"The error '{e}' occurred")
             return False
 
-    def paasswordHash(self):
+    def passwordHash(self):
         password1 = self.passwordInput.text()
         print("Hashing...")
         return hashlib.sha256(password1.encode('UTF-8')).hexdigest()
 
-    def openMain(self):
-        window = MainWindow()
+    def alreadyausercheck(self):
+        print("already a user check")
+        userName = self.nameInput.text()
+        print(userName)
+        if username_and_password_validation(get_database_connection(), str(userName),self.passwordHash()):
+            print("username in system and matching password")
+            return True
+        else:
+            print("username not in system or password doesnt match")
+            return False
 
+    def openMainWindow(self):
+        self.cams = MainWindow()
+        self.cams.show()
+        self.close()
 
 
 
@@ -99,6 +103,6 @@ class logInpage(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = logInpage()
-    app.exec_()
+    app.exec()
 
 '''TypeError: show(self): first argument of unbound method must have type 'QWidget'''

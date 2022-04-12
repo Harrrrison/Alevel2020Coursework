@@ -41,9 +41,9 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.signedUpAlready = self.findChild(QtWidgets.QPushButton, 'hasAccount')
 
         # Buttons:
-        self.signedUpAlready.clicked.connect(self.testCase)
+        # self.signedUpAlready.clicked.connect(self.testCase)
         self.termsOfUse = self.findChild(QtWidgets.QCheckBox, 'termsOfUse')
-        # self.signedUpAlready.clicked.connect(self.switchwindow)
+        self.signedUpAlready.clicked.connect(self.switchwindow)
         # self.signedUpAlready.clicked.connect(self.openMainWindow)
         self.signUpButton.clicked.connect(self.signupbuttonpressed)
         self.termsOfUse.stateChanged.connect(self.termsnandconditionsToggle)
@@ -162,11 +162,11 @@ class SignUpPage(QtWidgets.QMainWindow):
         else:
             email = self.emailInput.text()
             if email_validation(get_database_connection(), email):
-                self.termsOfUseMessage.setText(' ')
+                self.termsOfUseMessage.setText(' This email is already in use ')
                 print('Email invalid')
                 return False
             else:
-                self.termsOfUseMessage.setText('This email is already in use')
+                self.termsOfUseMessage.setText(' ')
                 print("Email valid")
                 return True
 
