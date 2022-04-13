@@ -37,12 +37,6 @@ class data_grabbing():
     def get_system_processor(self):
         return self.uname.processor
 
-    def print_boot_time(self):
-        print("=" * 40, "Boot Time", "=" * 40)
-        boot_time_timestamp = psutil.boot_time()
-        bt = datetime.fromtimestamp(boot_time_timestamp)
-        print(f"Boot Time: {bt.year}/{bt.month}/{bt.day} {bt.hour}:{bt.minute}:{bt.second}")
-
     def get_boot_year(self):
         return self.bt.year
 
@@ -117,7 +111,6 @@ class data_grabbing():
     def get_swap_percent_memory(self):
         swap = psutil.swap_memory()
         return swap.percent
-
 
     def get_device_partition_name(self, partition_device):
         return partition_device.device

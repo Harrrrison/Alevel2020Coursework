@@ -4,6 +4,7 @@ import sqlite3
 from sqlCode import *
 import hashlib
 from Scripts.ClearAndRedraw import *
+from Scripts.main import SignUpPage
 
 class logInpage(QtWidgets.QMainWindow):
     switch_window = QtCore.pyqtSignal()
@@ -26,8 +27,7 @@ class logInpage(QtWidgets.QMainWindow):
         self.logInButton = self.findChild(QtWidgets.QPushButton, 'logInButton')
         self.logInButton.clicked.connect(self.validateUser)
         self.donthaveaccount = self.findChild(QtWidgets.QPushButton)
-        #self.donthaveaccount.clicked.connect(self.showWindowClicked)
-        self.donthaveaccount.clicked.connect(self.showWindowClicked)
+        self.donthaveaccount.clicked.connect(self.openSignUpPage)
 
 
         self.show()
@@ -45,7 +45,8 @@ class logInpage(QtWidgets.QMainWindow):
         if self.alreadyausercheck():
             self.openMainWindow()
         else:
-            self.errorLabel.setText('user not valid')
+            self.errorLabel.setText('user not in system or password incorrect')
+
     def getUserInput(self):
         try:
             userName = self.nameInput.text()
@@ -84,7 +85,7 @@ class logInpage(QtWidgets.QMainWindow):
         print("already a user check")
         userName = self.nameInput.text()
         print(userName)
-        if username_and_password_validation(get_database_connection(), str(userName),self.passwordHash()):
+        if username_and_password_validation(get_database_connection(), str(userName), self.passwordHash()):
             print("username in system and matching password")
             return True
         else:
@@ -93,6 +94,11 @@ class logInpage(QtWidgets.QMainWindow):
 
     def openMainWindow(self):
         self.cams = MainWindow()
+        self.cams.show()
+        self.close()
+
+    def openSignUpPage(self):
+        self.cams = SignUpPage()
         self.cams.show()
         self.close()
 

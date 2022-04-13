@@ -30,9 +30,9 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.userNameInput = self.findChild(QtWidgets.QLineEdit, 'name_lineEdit')
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
         self.password1 = self.findChild(QtWidgets.QLineEdit, 'password_1')  # getting inital password input
-        # self.password1.setEchoMode(QtWidgets.QLineEdit)
         self.password2 = self.findChild(QtWidgets.QLineEdit, 'password_2')
         # self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
+        # self.password1.setEchoMode(QtWidgets.QLineEdit)
 
         # Labels:
 
@@ -42,9 +42,9 @@ class SignUpPage(QtWidgets.QMainWindow):
 
         # Buttons:
         # self.signedUpAlready.clicked.connect(self.testCase)
+        # self.signedUpAlready.clicked.connect(self.openMainWindow)
         self.termsOfUse = self.findChild(QtWidgets.QCheckBox, 'termsOfUse')
         self.signedUpAlready.clicked.connect(self.switchwindow)
-        # self.signedUpAlready.clicked.connect(self.openMainWindow)
         self.signUpButton.clicked.connect(self.signupbuttonpressed)
         self.termsOfUse.stateChanged.connect(self.termsnandconditionsToggle)
 
@@ -144,9 +144,11 @@ class SignUpPage(QtWidgets.QMainWindow):
     def termsandconditionscheck(self):
         if self.checkBoxState == True:
             print("T&C true")
+            self.termsOfUseMessage.setText(' ')
             return True
         else:
             print("T&C False")
+            self.termsOfUseMessage.setText('The terms and conditions needs to be checked')
             return False
 
     def emailvalidation(self):
