@@ -40,10 +40,10 @@ class partsTable(QWidget):
                 self.Data_grabber_functions.get_system_machine(),
                 self.Data_grabber_functions.get_system_processor()]
 
-        table_values.append(data)
+        table_values.append(data) # the data from the list need to be appended into the table values
 
         row = 0
-        for i in table_values:
+        for i in table_values: # a loop is needed to put them in the correct collums
             col = 0
             for item in i:
                 table.setItem(row, col, QTableWidgetItem(str(item)))
@@ -130,7 +130,7 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.cb, 6, 2)
         layout.addWidget(self.table_of_system_info, 7,0, 1, 3)
 
-        # Create a placeholder widget to hold our toolbar and canvas.
+        # Create a placeholder widget to hold the toolbar and canvas.
         widget = QtWidgets.QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)

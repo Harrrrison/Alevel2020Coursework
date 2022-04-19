@@ -4,7 +4,7 @@ DB_NAME = "UsersDataBase.db"
 SALT = "MJS12345433"
 
 
-def get_database_connection():
+def get_database_connection(): # a Connection to the database has to be established before any query is executed
     con = sqlite3.connect(DB_NAME)
     return con
 
@@ -19,7 +19,7 @@ def test_execute(connection, query):
 def execute_query(connection, query):
     cursor = connection.cursor()
     try:
-        cursor.execute(query)
+        cursor.execute(query) # gets the query as a paramiter then executes it from the connection
         connection.commit()
         print("Query executed successfully")
         return cursor.fetchone()
@@ -28,7 +28,7 @@ def execute_query(connection, query):
             print("Email not unique")
             return False
         else:
-            print(f"The error '{e}' occurred")
+            print(f"The error '{e}' occurred") # SQL doesnt print console errors hence the self error printing
             return False
 
 
@@ -45,7 +45,7 @@ def create_database(connection):
         # Windows version
         try:
             # file = open(r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Schema")
-            file = open(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Schema')
+            file = open(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Schema') # the schemea needs to be opened for the database to be creaetd
         except FileNotFoundError:
             file = open("Schema")
             print("file not found")
