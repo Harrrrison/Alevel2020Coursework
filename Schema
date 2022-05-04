@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS users(
+CREATE TABLE IF NOT EXISTS users( /* will ensure that there is a database for data to be added to */
     email NOT NULL UNIQUE,
-    username NOT NULL UNIQUE,
+    username NOT NULL UNIQUE, /* The use of  'UNIQUE' will prevent usernames be the same */
     password NOT NULL
 
 )

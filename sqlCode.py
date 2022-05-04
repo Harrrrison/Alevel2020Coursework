@@ -44,8 +44,8 @@ def create_database(connection):
         # r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\
         # Windows version
         try:
-            # file = open(r"C:\Users\ruthr\PycharmProjects\Alevel2020Coursework\Schema")
-            file = open(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Schema') # the schemea needs to be opened for the database to be creaetd
+            file = open(r'/Users/harrisonrigby/PycharmProjects/Alevel2020_Coursework/Schema') # the schemea needs to
+            # be opened for the database to be creaetd
         except FileNotFoundError:
             file = open("Schema")
             print("file not found")
@@ -57,6 +57,7 @@ def create_database(connection):
 
 
 def username_validation(connection, username):
+    # will take the inputted username and check if there is a email associated to validata it is in the database
     query = f"SELECT email FROM users WHERE username == ('{username}') ;"
     tables = execute_query(connection, query)
     tables_list = []
@@ -72,12 +73,13 @@ def username_validation(connection, username):
 
 
 def email_validation(connection, email):
+    # will take the user email and check if there is a username associated to validata it is in the database
     query = f"SELECT username FROM users WHERE email == ('{email}') ;"
     tables = execute_query(connection, query)
     tables_list = []
     try:
         for item in tables:
-            tables_list.append(item[0])
+            tables_list.append(item)
         print(tables_list)
         print("valid email")
         return True
@@ -99,6 +101,8 @@ def validation(connection, query):
 
 
 def username_and_password_validation(connection, username, hashedPassword):
+    # will take the username and a hashed password and compares the hashed password in the database to the hashed
+    # password taken in to authroise the user
     query = f"SELECT password FROM users WHERE username == ('{username}') ;"
     tables = execute_query(connection, query)
     tables_list = []
@@ -118,5 +122,5 @@ def username_and_password_validation(connection, username, hashedPassword):
 
 if __name__ == '__main__':
     print(".")
-    username_validation(get_database_connection(), 'Harrison')
+    email_validation(get_database_connection(), 'harrisonrigby@icloud.com')
     create_database(get_database_connection())

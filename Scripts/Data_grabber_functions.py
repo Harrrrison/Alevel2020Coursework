@@ -12,12 +12,12 @@ class data_grabbing():
         boot_time_timestamp = psutil.boot_time()
         self.bt = datetime.fromtimestamp(boot_time_timestamp)
 
-    def get_size(self, bytes, suffix="B"):
+    def get_size(self, bytes, suffix="B"):  # Will be applied onto the returned raw number of bytes
         factor = 1024
-        for unit in ["", "K", "M", "G", "T", "P"]:
+        for unit in ["", "K", "M", "G", "T", "P"]:  # Will add the correct unit after conversion
             if bytes < factor:
                 return f"{bytes:.2f}{unit}{suffix}"
-            bytes /= factor
+            bytes /= factor  # Will divide the bytes by the factor untill it is less than to ge the correct unit
 
     def get_system_name(self):
         return self.uname.system

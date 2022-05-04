@@ -31,8 +31,6 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.emailInput = self.findChild(QtWidgets.QLineEdit, 'email_LineEdit')
         self.password1 = self.findChild(QtWidgets.QLineEdit, 'password_1')  # getting inital password input
         self.password2 = self.findChild(QtWidgets.QLineEdit, 'password_2')
-        # self.password2.setEchoMode(QtWidgets.QLineEdit.Password)
-        # self.password1.setEchoMode(QtWidgets.QLineEdit)
 
         # Labels:
 
@@ -41,8 +39,6 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.signedUpAlready = self.findChild(QtWidgets.QPushButton, 'hasAccount')
 
         # Buttons:
-        # self.signedUpAlready.clicked.connect(self.testCase)
-        # self.signedUpAlready.clicked.connect(self.openMainWindow)
         self.termsOfUse = self.findChild(QtWidgets.QCheckBox, 'termsOfUse')
         self.signedUpAlready.clicked.connect(self.switchwindow)
         self.signUpButton.clicked.connect(self.signupbuttonpressed)
@@ -64,6 +60,7 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.close()
 
     def testCase(self):
+        # here for checking cirtan errors in the code, can be linked into the main app with the button clicks
         userName = self.userNameInput.text()
         print(userName)
         if username_validation(get_database_connection(), str(userName)):
@@ -75,10 +72,6 @@ class SignUpPage(QtWidgets.QMainWindow):
             print("username valid")
             return True
 
-    def passwordVisibilty(self):
-        pass
-        # self.password1.setEchoMode(QtWidgets.QLineEdit.password)
-        # self.password2.setEchoMode(QtWidgets.QLineEdit.password)
 
     def signupbuttonpressed(self):
         print('password 1: ' + self.password1.text())
@@ -102,9 +95,9 @@ class SignUpPage(QtWidgets.QMainWindow):
             # showing that the passwords are matching ensuring that neither are stored
             return True  # showing that they arnt matching
 
-    def passwordvalidation(self, matching):  # I could have the mathcing validation outside of the function??
+    def passwordvalidation(self, matching):  # validated at the backend aswell
         #
-        # this will validate the pass word, i will use subfunctions
+        # Checks password lenght for security
         #
         if matching:
             if len(self.password1.text()) < 5 or len(self.password1.text()) > 15:  # password lenght limit of 15 with
@@ -118,7 +111,7 @@ class SignUpPage(QtWidgets.QMainWindow):
 
     def addtodatabase(self):
         #
-        # need to inplement the sql code into this fucntion ratehr than just using an array :)
+        # will run the validation code then upon true it will append it to the database
         #
         print(self.userNameInput.text())
         print(self.emailInput.text())
@@ -136,12 +129,14 @@ class SignUpPage(QtWidgets.QMainWindow):
         self.openMainWindow()
 
     def termsnandconditionsToggle(self):
+        # will toggle the stake of the check box
         if self.checkBoxState == True:
             self.checkBoxState = False
         else:
             self.checkBoxState = True
 
     def termsandconditionscheck(self):
+        # will check the state of the checkbox and validate
         if self.checkBoxState == True:
             print("T&C true")
             self.termsOfUseMessage.setText(' ')
@@ -173,6 +168,7 @@ class SignUpPage(QtWidgets.QMainWindow):
                 return True
 
     def alreadyausercheck(self):
+        # runs the user check in the sql code file and evaluating the bool output
         print("already a user check")
         userName = self.userNameInput.text()
         print(userName)
@@ -187,8 +183,9 @@ class SignUpPage(QtWidgets.QMainWindow):
 
     def passwordhash(self):
         password1 = self.password1.text()
-        print("Hashing...")
-        return hashlib.sha256(password1.encode('UTF-8')).hexdigest()
+        print("Hashing...")  # Used during debugging to ensure that this function has run
+        return hashlib.sha256(password1.encode('UTF-8')).hexdigest()  # Returned as hex code but the .hexdigest()
+        # will convert it into a string form that can be stored
 
 
     def openMainWindow(self):
@@ -202,9 +199,10 @@ if __name__ == "__main__":
     cwd = os.getcwd()  # Get the current working directory (cwd)
     files = os.listdir(cwd)  # Get all the files in that directory
     print("Files in %r: %s" % (cwd, files))
-    app = QtWidgets.QApplication(sys.argv)
-    window1 = SignUpPage()
-    app.exec()
+    # Above wll print all the files in the directory to ensure that all are imported correctly to prevent crashes
+    app = QtWidgets.QApplication(sys.argv)  # Creates the application using QApplication
+    window1 = SignUpPage()  # Instanciates the class
+    app.exec()  # Then runs the application
     widget = QtWidgets.QStackedWidget()
     logInWindow = logInpage()
     # mainPage = MainPage()

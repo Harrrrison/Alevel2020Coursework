@@ -16,6 +16,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 
 from matplotlib.figure import Figure
 
+
 class partsTable(QWidget):
     def __init__(self):
         super().__init__()
@@ -34,18 +35,20 @@ class partsTable(QWidget):
         table.setHorizontalHeaderLabels(['System', 'Node Name', 'Release', 'Version', 'Machine', 'Processor'])
         table_values = []
 
+        # Raw system info array
         data = [self.Data_grabber_functions.get_system_name(), self.Data_grabber_functions.get_system_node(),
                 self.Data_grabber_functions.get_system_release(),
                 self.Data_grabber_functions.get_system_version(),
                 self.Data_grabber_functions.get_system_machine(),
                 self.Data_grabber_functions.get_system_processor()]
 
-        table_values.append(data) # the data from the list need to be appended into the table values
+        table_values.append(data)  # the data from the list need to be appended into the table values
 
         row = 0
-        for i in table_values: # a loop is needed to put them in the correct collums
+        for i in table_values:  # a loop is needed to put them in the correct collums
             col = 0
-            for item in i:
+            for item in i:  # Will itterate through all the items that have been added to the item list
+                # then append them to the collum
                 table.setItem(row, col, QTableWidgetItem(str(item)))
                 col += 1
             row += 1
@@ -56,7 +59,12 @@ class partsTable(QWidget):
         vbox.addWidget(table)
         self.setLayout(vbox)
         self.show()
+
+
 class MplCanvas(FigureCanvas):
+
+    # In this class the canvas is created -- this will give the graph a place to sit
+    # The width height and dpi can all be adjusted with an integer value
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -75,31 +83,28 @@ class MainWindow(QtWidgets.QMainWindow):
         self.now = datetime.now()
         self.current_time = self.now.strftime("%H:%M:%S")
 
+        # instantiating the canvas'
         self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
         self.canvas.axes.set_ylabel("% RAM used")
         self.setCentralWidget(self.canvas)
 
         self.canvas2 = MplCanvas(self, width=5, height=4, dpi=100)
-        #self.canvas2.title("% CPU used")
 
         self.canvas_3 = MplCanvas(self, width=5, height=4, dpi=100)
-       # self.canvas_3.title("Bytes received")
 
         self.canvas_3_type = ""
         self.time_interval = 1000
-        # self.ax = plt.axes()
+
 
         '''Styling'''
         self.color = 'b'
-        # self.ax.set_facecolor("blue")
-        # self.setStyleSheet("background-color: rgb(16, 24, 32);")
-        # self.ax.title('123')
 
         layout = QHBoxLayout()
 
         '''Combo box to change color'''
         self.cb = QComboBox()
-        self.cb.addItems(["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson", 'Purple', 'darkviolet'])
+        self.cb.addItems(
+            ["Blue", "Red", "Green", "Black", "Brown", "Yellow", "White", "Cyan", "Crimson", 'Purple', 'darkviolet'])
         self.cb.currentIndexChanged.connect(self.changecolor)
 
         '''Third graph combo box'''
@@ -118,6 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
         toolbar2 = NavigationToolbar(self.canvas2, self)
         toolbar3 = NavigationToolbar(self.canvas_3, self)
 
+        # Layout of the while widget page using grid layout
         layout = QtWidgets.QGridLayout()
         layout.addWidget(toolbar, 0, 0, 1, 3)
         layout.addWidget(self.canvas, 1, 0, 1, 3)
@@ -128,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.cb2, 6, 0)
         layout.addWidget(self.cb3, 6, 1)
         layout.addWidget(self.cb, 6, 2)
-        layout.addWidget(self.table_of_system_info, 7,0, 1, 3)
+        layout.addWidget(self.table_of_system_info, 7, 0, 1, 3)
 
         # Create a placeholder widget to hold the toolbar and canvas.
         widget = QtWidgets.QWidget()
@@ -136,8 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(widget)
 
         n_data = 15
-        # self.xdata = [0,1,2,3,4,5,6,7,8,9,10,11,12,self.current_time]
-        # self.ydata = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+        # Below is the data for each of the three graphs thats added onto the axis
         self.xdata = list(range(n_data))
         self.ydata = [self.Data_grabber_functions.get_percent_memory() for i in range(n_data)]
 
@@ -171,12 +176,12 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.timer.timeout.connect(self.update_plot_swap_percent)
         self.timer.timeout.connect(self.change_graph)
 
-
-
         # self.timer.timeout.connect(self.update_plot_bytes_sent)
 
         self.timer.start()
 
+# All the update plot methods dynamicly change the conense of the graph by clearing the graph with the current
+    # points, sotring them and then replotting the whole ting
     def update_plot_memory_available(self):
 
         self.ydata = self.ydata[1:] + [self.Data_grabber_functions.get_percent_memory()]
@@ -189,12 +194,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def update_plot_CPU_usage(self):
 
+        # This method will update the CPU usage graph thiough the import get_total_CPU_usage
+
         self.ydata2 = self.ydata2[1:] + [self.Data_grabber_functions.get_total_CPU_usage()]
         self.xdata2 = self.xdata2[1:] + [self.current_time]
         self.canvas2.axes.cla()
         self.canvas2.axes.set_title("% CPU used")
         self.canvas2.axes.plot(self.xdata2, self.ydata2, self.color, label="memory")
-
 
         self.canvas2.draw()
 
@@ -247,7 +253,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_time_interval(self):
         self.time_interval = int(self.cb3.currentText())
         self.timer.setInterval(self.time_interval)
-
 
 
 if __name__ == '__main__':
